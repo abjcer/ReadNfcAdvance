@@ -19,6 +19,10 @@ class FlipperInitializr private constructor(context: Any) {
     init {
         if (context is Context) {
             SoLoader.init(context, false)
+            // Configure LeakCanary to send leak events to Flipper
+            leakcanary.LeakCanary.config = leakcanary.LeakCanary.config.run {
+                copy(eventListeners = eventListeners + com.facebook.flipper.plugins.leakcanary2.FlipperLeakEventListener())
+            }
             if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(context)) {
                 val client: FlipperClient = AndroidFlipperClient.getInstance(context)
                 networkPlugin = NetworkFlipperPlugin()
@@ -27,7 +31,7 @@ class FlipperInitializr private constructor(context: Any) {
                 client.addPlugin(InspectorFlipperPlugin(context, DescriptorMapping.withDefaults()))
                 client.addPlugin(CrashReporterPlugin.getInstance())
                 client.addPlugin(LeakCanary2FlipperPlugin())
-                //client.addPlugin(SharedPreferencesFlipperPlugin(context, "ReadNfc"))
+                // client.addPlugin(SharedPreferencesFlipperPlugin(context, "ReadNfc"))
                 client.start()
             }
         }

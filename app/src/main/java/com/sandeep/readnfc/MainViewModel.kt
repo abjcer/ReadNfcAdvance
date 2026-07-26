@@ -109,21 +109,18 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                         stringBuilder.append("Mifare Ultralight type: ")
                         stringBuilder.append(type)
                     }
-                    IsoDep::class.java.name ->{
+                    IsoDep::class.java.name -> {
                         Log.d(TAG, "readTag: IsoDep")
-                        val isoDep:IsoDep = IsoDep.get(tag)
+                        val isoDep: IsoDep = IsoDep.get(tag)
                         isoDep.connect()
                         Log.d(TAG, "readTag: $isoDep")
-                        if (isoDep.isConnected){
+                        if (isoDep.isConnected) {
                             val response: ByteArray =
                                 isoDep.transceive(createSelectAidApdu(AID_ANDROID))
                             Log.d(TAG, "readTag: response byteToHex = ${bytesToHexString(response)}")
                         }
                         isoDep.close()
-
                     }
-
-
                 }
             }
             Log.d(TAG, "dumpTagData Return \n $stringBuilder")
@@ -138,7 +135,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
             0,
             result,
             0,
-            CLA_INS_P1_P2.size
+            CLA_INS_P1_P2.size,
         )
         result[4] = aid.size.toByte()
         System.arraycopy(aid, 0, result, 5, aid.size)
@@ -215,4 +212,3 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
         return sb.toString()
     }
 }
-
