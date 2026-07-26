@@ -66,8 +66,11 @@ jobs:
           java-version: 11
           distribution: zulu
 
+      - name: Grant execute permissions to Gradle wrapper
+        run: chmod +x ./gradlew
+
       - name: Build debug APK
-        run: chmod +x ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
